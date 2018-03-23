@@ -1,14 +1,18 @@
 package com.example.matheusfialho.mapalocatual;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -17,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -27,6 +32,16 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private boolean mPermissionDenied = false;
 
+
+    /*
+    public Location getLocation() {
+        location = getLocation();
+        return location;
+    }
+    private Location location = getLocation();
+    private double latitude = location.getLatitude();
+    private double longitude = location.getLongitude();
+
     /*private GoogleApiClient googleApiClient;
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     */
@@ -35,16 +50,12 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*
-        ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        */
-
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
     }
 
 
@@ -100,24 +111,25 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
 
         mMap = googleMap;
         enableMyLocation();
+        mMap.getUiSettings().setMapToolbarEnabled(true);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setZoomGesturesEnabled(true);
 
+        //location = mMap.getMyLocation();
+        //LatLng MyLocation = new LatLng(location.getLatitude(), location.getLongitude());
+
+        //CameraUpdateFactory.newCameraPosition(mMap.getCameraPosition());
+        //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         /*
+        mMap.setMinZoomPreference(6.0f);
+        mMap.setMaxZoomPreference(14.0f);
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         mMap.setMyLocationEnabled(true);
         */
     }
@@ -144,6 +156,28 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         } else {mPermissionDenied = true;
         }
     }
+
+
+    /*
+
+    TENTATIVA DE PEGAR LAT E LONG DA MINHA LOCALIZAÇÃO
+    private void handleNewLocation(Location location) {
+        Log.d(String.valueOf(this), location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+        mMap.addMarker(new MarkerOptions().position(new LatLng(currentLatitude, currentLongitude)).title("Current Location"));
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .title("I am here!");
+        mMap.addMarker(options);
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+    }
+     */
+
 
     @Override
     protected void onResumeFragments() {
@@ -177,6 +211,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     public boolean onMyLocationButtonClick() {
         return false;
     }
+
 
     /*
     @Override
