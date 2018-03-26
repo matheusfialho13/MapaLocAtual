@@ -21,8 +21,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLocationButtonClickListener,
@@ -31,6 +33,9 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
     private GoogleMap mMap;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private boolean mPermissionDenied = false;
+
+    private Marker currentLocationMaker;
+    private LatLng currentLocationLatLong;
 
 
     /*
@@ -60,6 +65,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
 
 
     /*
+
+    LatLng loc= mMap.getCameraPosition().target;
+
+        Toast.makeText(this, "Coordenadas: "+loc.toString(),
+                Toast.LENGTH_SHORT).show();
+
+
     @Override
     public void onRequestPermissionsResult(
             int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -115,6 +127,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+        LatLng nordeste = new LatLng(-12.5, -41.5);
+        float zoom = (float) 5.0;
+        LatLng local = mMap.getCameraPosition().target;
+        Toast.makeText(MapsActivity.this,
+                "Coordenadas: "+local.toString(),Toast.LENGTH_LONG).show();
+        //onLocationChanged(mMap.getMyLocation());
+        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nordeste,zoom));
 
         //location = mMap.getMyLocation();
         //LatLng MyLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -133,6 +152,34 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         mMap.setMyLocationEnabled(true);
         */
     }
+
+
+    /*
+    public void onLocationChanged(Location location) {
+        if (currentLocationMaker != null) {
+            currentLocationMaker.remove();
+        }
+        //Add marker
+        currentLocationLatLong = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(currentLocationLatLong);
+        markerOptions.title("Localização atual");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        currentLocationMaker = mMap.addMarker(markerOptions);
+
+        //Move to new location
+        CameraPosition cameraPosition = new CameraPosition.Builder().zoom(15).target(currentLocationLatLong).build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        //LocationData locationData = new LocationData(location.getLatitude(), location.getLongitude());
+        //mDatabase.child("location").child(String.valueOf(new Date().getTime())).setValue(locationData);
+
+        Toast.makeText(this, "Localização atualizada", Toast.LENGTH_SHORT).show();
+        //getMarkers();
+    }
+    */
+
+
     private void enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
