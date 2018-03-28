@@ -133,7 +133,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMyLoca
         Toast.makeText(MapsActivity.this,
                 "Coordenadas: "+local.toString(),Toast.LENGTH_LONG).show();
         //onLocationChanged(mMap.getMyLocation());
-        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nordeste,zoom));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(nordeste,zoom));
 
         //location = mMap.getMyLocation();
         //LatLng MyLocation = new LatLng(location.getLatitude(), location.getLongitude());
